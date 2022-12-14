@@ -25,7 +25,7 @@
 
 const sectionsList = document.querySelectorAll("section");
 const navUl = document.getElementById("navbar__list");
-const links = document.querySelectorAll("a");
+
 let scrollWY = window.pageYOffset;
 const btnTop = document.querySelector(".goToUp");
 const collapsibleSec = document.querySelector(".collapsible");
@@ -55,11 +55,19 @@ function createLiElement(textValue){
     const a= document.createElement('a');
     a.setAttribute('class','menu__link');
     a.setAttribute('href',`#${textValue}`);
+    a.setAttribute('data-nav',textValue);
     a.textContent=textValue;
     li.appendChild(a);
     navUl.appendChild(li);
   
 }
+// Build menu 
+sectionsList.forEach(section => {
+    const text = section.getAttribute('id');
+    createLiElement(text)
+     
+ });
+ const linkss = document.querySelectorAll("a");
 
 
 // Add class 'active' to section when near top of viewport
@@ -68,12 +76,20 @@ function createLiElement(textValue){
    
     
     function activeClass(){
-    sectionsList.forEach(section => {
+    sectionsList.forEach(section => {  
         //console.log(section.getBoundingClientRect().top)
         section.classList.remove("your-active-class");
-        if( section.getBoundingClientRect().top>= -500&&  section.getBoundingClientRect().top < 150)
+        if( section.getBoundingClientRect().top>= -500&&  section.getBoundingClientRect().top < 150){
         section.classList.add("your-active-class");
-         
+        for (let i = 0; i < linkss.length; i++) {
+            linkss[i].classList.remove("active-class");
+            if(linkss[i].getAttribute('data-nav')=== section.getAttribute('id')){
+                linkss[i].classList.add("active-class");
+        }
+            else{
+                linkss[i].classList.remove("active-class");
+            }
+         } }
      });
      
     }
@@ -84,12 +100,13 @@ function createLiElement(textValue){
 
 
    
-    links.forEach(link => {  
-            link.addEventListener('click',function(event){
+    linkss.forEach(linkk => {  
+        linkk.addEventListener('click',function(event){
             event.preventDefault();
-            console.log(link);
-            window.location.href = `#${link.textContent}`})
-        
+           // console.log(event.target.dataset.nav);
+           document.getElementById(`${event.target.dataset.nav}`).scrollIntoView({behavior: "smooth"});
+           window.location.href=  `#${event.target.dataset.nav}` ;     
+        })
     });
 
 
@@ -99,12 +116,7 @@ function createLiElement(textValue){
  * 
 */
 
-// Build menu 
-sectionsList.forEach(section => {
-    const text = section.getAttribute('id');
-    createLiElement(text)
-     
- });
+
 // Scroll to section on link click
 // scroll functions
 // distinguish the active section
@@ -137,7 +149,11 @@ scrollWY = window.pageYOffset;
 //  go top 
 btnTop.addEventListener('click',scrollToTop);
 function scrollToTop() {
-    window.scrollTo(0,0)
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
 }
 
 
