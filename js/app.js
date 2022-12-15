@@ -76,21 +76,31 @@ sectionsList.forEach(section => {
    
     
     function activeClass(){
-    sectionsList.forEach(section => {  
-        //console.log(section.getBoundingClientRect().top)
-        section.classList.remove("your-active-class");
-        if( section.getBoundingClientRect().top>= -500&&  section.getBoundingClientRect().top < 150){
-        section.classList.add("your-active-class");
-        for (let i = 0; i < linkss.length; i++) {
-            linkss[i].classList.remove("active-class");
-            if(linkss[i].getAttribute('data-nav')=== section.getAttribute('id')){
-                linkss[i].classList.add("active-class");
-        }
-            else{
+        sectionsList.forEach(section => {  
+            //console.log(section.getBoundingClientRect().top)
+            
+            section.classList.remove("your-active-class");
+            if( section.getBoundingClientRect().top>= -500&&  section.getBoundingClientRect().top < 150){
+            section.classList.add("your-active-class");
+            for (let i = 0; i < linkss.length; i++) {
+                linkss[i].addEventListener('click',function(event){
+                    event.preventDefault();
+                    window.scrollTo({
+                        top: document.getElementById(`${event.target.dataset.nav}`).offsetTop,
+                        left: document.getElementById(`${event.target.dataset.nav}`).offsetLeft,
+                        behavior: 'smooth'
+                      });
+                })
                 linkss[i].classList.remove("active-class");
+                if(linkss[i].getAttribute('data-nav')=== section.getAttribute('id')){
+                    linkss[i].classList.add("active-class");
+                  
             }
-         } }
-     });
+                else{
+                    linkss[i].classList.remove("active-class");
+                }
+             } }
+         });
      
     }
     
@@ -99,16 +109,18 @@ sectionsList.forEach(section => {
 // Scroll to anchor ID using scrollTO event
 
 
-   
+   /*
     linkss.forEach(linkk => {  
         linkk.addEventListener('click',function(event){
             event.preventDefault();
+            let e =document.getElementById(`${event.target.dataset.nav}`);
+            console.log(e.getBoundingClientRect().left);
            // console.log(event.target.dataset.nav);
-           document.getElementById(`${event.target.dataset.nav}`).scrollIntoView({behavior: "smooth"});
+           //document.getElementById(`${event.target.dataset.nav}`).scrollIntoView({behavior: "smooth"});
            window.location.href=  `#${event.target.dataset.nav}` ;     
         })
     });
-
+*/
 
 /**
  * End Main Functions
